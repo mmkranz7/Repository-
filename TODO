@@ -1,0 +1,24 @@
+CHECK Make the move left work.
+	20-30 minutes
+	Make sure that you disregard yourself and loop through all the other newgroups other that the one that is selected.
+	10-60 mins
+ KINDA GRAVITY
+	Still we need to fix that it stops on top of the jelly. that is its own dude.
+		check other cases where two jellies are on top of each other, merged (or not merged)
+		Try putting in prints and then seeing if everything is working and try to work on some of the code and look at what works and what doenst
+		
+	20 mins.
+	
+PUSHING
+Have the groups also check for jellys next to them and then run the moveright function on them and check if they can move and if they
+cannot move than you do not move either.
+60 mins-2hrs
+MORE LEVELS
+20 mins;
+
+The Amazing Brick.
+try it.
+3D something.
+
+pick one of these and design the game in a text document
+list features and group them if they would go together in code
