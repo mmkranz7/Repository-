@@ -23,7 +23,6 @@ public class Join {
 	}
 
 	public boolean Gravity(){
-
 		if(GravityCheck(false)){
 			GravityCheck(true);
 			for(Object z : joinedjelly){
@@ -56,91 +55,61 @@ public class Join {
 		}
 		return true;
 	}
-	public ArrayList<Join> NeighborMakerRight(){
+	public ArrayList<Join> NeighborMaker(String dir){
 		ArrayList<Join> Neighbor = new ArrayList<Join>();
 		for(Object y: joinedjelly){
 			for(Join i : game.newGroups){
 				for(Object z : i.joinedjelly){
-					if(y.yPos==z.yPos&&y.xPos+1==z.xPos&&!Neighbor.contains(i)&&i!=this){	
+					if(y.yPos==z.yPos&&y.xPos+(dir=="r" ? 1:-1) ==z.xPos&&!Neighbor.contains(i)&&i!=this){	
 						Neighbor.add(i);
+						//creates a list of joins that are next to itself
 					}
 				}
 			}
 		}
 		return Neighbor;
 	}
-	public ArrayList<Join> NeighborMakerLeft(){
-		ArrayList<Join> Neighbor = new ArrayList<Join>();
-		for(Object y: joinedjelly){
-			for(Join i : game.newGroups){
-				for(Object z : i.joinedjelly){
-					if(y.yPos==z.yPos&&y.xPos-1==z.xPos&&!Neighbor.contains(i)&&i!=this){	
-						Neighbor.add(i);
-					}
-				}
-			}
-		}
-		return Neighbor;
-	}
-	public void MoveRight(){
-		if(!CheckRight()){
+	public void Move(String dir){
+		if(!Check(dir)){
 			return;
+			//checks if it can move
 		}
-		for( Join p : NeighborMakerRight()){
-			p.MoveRight();
+		for( Join p : NeighborMaker(dir)){
+			p.Move(dir);
+			//moves neighbor
 		}
 		for(Object y : joinedjelly){
-			y.moveright();
+			y.move(dir);
+			//moves itself
 		}
 	}
-	public boolean CheckRight(){
+	public boolean Check(String dir){
 		for(Object y: joinedjelly){
-			if(y.xPos+1 < game.level[y.yPos].length &&
-					game.level[y.yPos][y.xPos+1] ==1){
-				return false;
-			}
-		}
-			for(Join x : NeighborMakerRight()){
-				if(!x.CheckRight()){
+			if(dir=="r"){
+				if(y.xPos+1 < game.level[y.yPos].length &&
+						game.level[y.yPos][y.xPos+1] ==1){
+					return false;
+					//checks if it is not next to wall
+				}
+			}else{
+				if(y.xPos-1 >= 0 &&
+						game.level[y.yPos][y.xPos-1] ==1){
 					return false;
 				}
+				//checks if it is not next to wall
 			}
-			return true;
-	}
-	public boolean CheckLeft(){
-		for(Object y: joinedjelly){
-			if(y.xPos-1 >= 0 &&
-					game.level[y.yPos][y.xPos-1] ==1){
+		}
+		for(Join x : NeighborMaker(dir)){
+			if(!x.Check(dir)){
 				return false;
+				//checks its neighbors
 			}
 		}
-			for(Join x : NeighborMakerLeft()){
-				if(!x.CheckLeft()){
-					return false;
-				}
-			}
-			return true;
+		return true;
 	}
 
 
-	//makes sure that the block to the right is clear
-
-
-	public void MoveLeft(){
-		if(!CheckLeft()){
-			return;
-		}
-		for( Join p : NeighborMakerLeft()){
-			p.MoveLeft();
-		}
-		for(Object y : joinedjelly){
-			y.moveleft();
-		}
-	}
-	//makes sure that the block to the right is clear
-
-
-	public void Dothething(GameController game, Join group1, Join group2){
+	public void ConnectJelly(GameController game, Join group1, Join group2){
 		group1.joinedjelly.addAll(group2.joinedjelly);
 		group2.c = null;
 		group2.joinedjelly.clear();
@@ -150,19 +119,24 @@ public class Join {
 	public void CombineJelly(GameController game, Join group1, Join group2, String side){
 		for(Object one : group1.joinedjelly){
 			for(Object two : group2.joinedjelly){
-				if(one.xPos == two.xPos
-						&(one.yPos-1 == two.yPos && group1 != group2 || one.yPos+1 == two.yPos && group1 != group2)){
-					Dothething(game,group1,group2);
+//				if(one.xPos == two.xPos
+//						&(one.yPos-1 == two.yPos && group1 != group2 || one.yPos+1 == two.yPos && group1 != group2)){
+//					ConnectJelly(game,group1,group2);
+//					return;
+//				}
+				
+				if(Math.abs(one.xPos-two.xPos)+Math.abs(one.yPos-two.yPos)==1&& group1!= group2){
+					ConnectJelly(game,group1,group2);
 					return;
 				}
-
+				
 				//loops through the joinedjellys in the new groups and checks for the color
-				if(one.yPos == two.yPos
-						&&(one.xPos-1 == two.xPos && group1 != group2 || one.xPos+1 == two.xPos && group1 != group2)){
-					Dothething(game,group1,group2);
-					return;
-					//checks if the jellys of the same color are touching and then puts them into the same group.
-				}
+//				if(one.yPos == two.yPos
+//						&&(one.xPos-1 == two.xPos && group1 != group2 || one.xPos+1 == two.xPos && group1 != group2)){
+//					ConnectJelly(game,group1,group2);
+//					return;
+//					//checks if the jellys of the same color are touching and then puts them into the same group.
+//				}
 				//checks for the jellys of the same color and if they are touching on the sides
 			}
 		}

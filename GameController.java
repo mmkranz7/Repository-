@@ -20,7 +20,7 @@ public class GameController extends JFrame {
 	int CELL_SIZE = 50;
 	int y = 0;
 	int levelnumber = 0;
-	 
+
 	//Controls the scale of the game
 	Object object;
 	Join join;
@@ -68,29 +68,18 @@ public class GameController extends JFrame {
 			while(line!=null){
 				int y = 0;
 				while(line!=(null)&&!line.equals("")){
-
 					ListLevels.add(new ArrayList <>());
 					ListLevels.get(numlevel).add(new ArrayList<>());
 					for(int x=0; x<line.length(); x++){	
-						System.out.print(numlevel);
 						ListLevels.get(numlevel).get(y).add((int) (line.charAt(x)-'0'));
-						System.out.print((line.charAt(x)-'0'));
 						//loops through the line adding the necesary characters into the correct parts of the triple array
 					}
-					System.out.println();
 					y++;
 					line = reader.readLine();
 				}
 				numlevel++;
-				System.out.println();
-				System.out.println(numlevel);
-				System.out.println();
-				
 				line = reader.readLine();
 			}
-//			for( Integer i = 0; i <numlevel; i++){
-//			levelchooser.addItem(i.toString());
-//			}
 			Levels = new int[ListLevels.size()][][];
 			for(int z=0; z<numlevel; z++){
 				System.out.println(ListLevels.get(z).size());
@@ -108,27 +97,21 @@ public class GameController extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		}
-		
-	
+	}
+
+
 	public void createJelly(){
 		level = Levels[levelnumber];
 		for(int i = 0;i < level[0].length; i++){
 			for(int j =0; j<level.length;j++){
 				if(level[j][i] == 2){
-					Join newGroup = new Join(this, Color.RED);
-					newGroup.joinedjelly.add( new Object(this,i,j,Color.RED,1,1,newGroup));
-					newGroups.add(newGroup);
+					JellyMake(i,j,Color.RED);
 				}
 				if(level[j][i] == 3){
-					Join newGroup = new Join(this, Color.BLUE);
-					newGroup.joinedjelly.add( new Object(this,i,j,Color.BLUE,1,1,newGroup));
-					newGroups.add(newGroup);
+					JellyMake(i,j,Color.BLUE);
 				}
 				if(level[j][i] == 4){
-					Join newGroup = new Join(this, Color.GREEN);
-					newGroup.joinedjelly.add( new Object(this,i,j,Color.GREEN,1,1,newGroup));
-					newGroups.add(newGroup);
+					JellyMake(i,j,Color.GREEN);
 				}
 				//initializes the jellys, using the numbers to represent different types of blocks
 			}
@@ -136,6 +119,11 @@ public class GameController extends JFrame {
 		}
 	}
 
+	public void JellyMake(int i,int j,Color c){
+		Join newGroup = new Join(this, c);
+		newGroup.joinedjelly.add( new Object(this,i,j,c,1,1,newGroup));
+		newGroups.add(newGroup);
+	}
 	public void step(){
 		//loops over and over as the game loop
 		//		CELL_SIZE = getWidth()/12;
@@ -201,15 +189,13 @@ public class GameController extends JFrame {
 		setSize(level[levelnumber].length*CELL_SIZE, level.length*CELL_SIZE);
 		//resets the jellys
 	}
-	public void paint(Graphics g) {
-
+	public void BasicGraphicsInit(Graphics g){
 		g.setColor(Color.gray);
 		g.fillRect(0, 0, 100*CELL_SIZE, 100*CELL_SIZE);
 		//^ makes the background grey
 		g.setColor(Color.YELLOW);
 		Highlight(g);
 		//^makes the highlight
-
 		g.setColor(Color.BLACK);
 		for(Join x : newGroups){ 
 			for(Object z : x.joinedjelly ){
@@ -218,8 +204,6 @@ public class GameController extends JFrame {
 		}
 		//makes the jellys
 		g.setColor(Color.WHITE);
-
-
 		for(int i = 0;i < level[levelnumber].length; i++){
 			for(int j =0; j<level.length;j++){
 				if(level[j][i]==1){
@@ -229,6 +213,10 @@ public class GameController extends JFrame {
 
 			}
 		}
+	}
+	public void paint(Graphics g) {
+		BasicGraphicsInit(g);
+		g.setColor(Color.WHITE);
 		//makes the tutorial thingy and then takes it away once u hit a button
 		if(y==0){
 			g.setColor(Color.WHITE);
@@ -240,15 +228,10 @@ public class GameController extends JFrame {
 			g.drawString("ARROWS TO MOVE. THE SPACEBAR IS USED TO SWITCH JELLIES. USE R TO RESET.", 60, 160);
 			g.drawString("HIT ENTER TO BEGIN", 100, 180);
 		}
-		//Displays the jellys that have joined
 		if(win == true){
 			levelnumber++;
 			reset();
 			win = false;
-			//			 newGroup.joinedjelly = new ArrayList();
-			//not needed but probably need to re initialize
-
-
 			//reinitializes the jellys allowing for the next level to begin
 		}
 		step();
@@ -267,9 +250,9 @@ public class GameController extends JFrame {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			switch (e.getKeyCode()){
-			case KeyEvent.VK_RIGHT:System.out.println("right key pressed");newGroups.get(WhichNewGroup).MoveRight();
+			case KeyEvent.VK_RIGHT:System.out.println("right key pressed");newGroups.get(WhichNewGroup).Move("r");
 			break;
-			case KeyEvent.VK_LEFT:System.out.println("left key pressed");newGroups.get(WhichNewGroup).MoveLeft();
+			case KeyEvent.VK_LEFT:System.out.println("left key pressed");newGroups.get(WhichNewGroup).Move("l");
 			break;
 			case KeyEvent.VK_DOWN:System.out.println("down key pressed");
 			break;
