@@ -43,9 +43,9 @@ public class Object {
 	//	}
 	
 	public boolean CheckingPushleft(Join x){
-		if(x.MoveLeft()){
-			return true;
-		}
+//		if(x.MoveLeft()){
+//			return true;
+//		}
 		return false;
 	}
 	//never reached
@@ -105,7 +105,6 @@ public class Object {
 								return "";
 							}
 						}
-					}
 				}
 			}
 		}
@@ -119,12 +118,14 @@ public class Object {
 		}
 
 		//makes this jelly move to the right
+	}
 		return "";
-	}		
+	}
+
 	public boolean CheckingPushright(Join x){
-		if(x.MoveRight()){
-			return true;
-		}
+//		if(x.MoveRight()){
+//			return true;
+//		}
 		return false;
 	}
 	public void moveleft(){

@@ -56,40 +56,86 @@ public class Join {
 		}
 		return true;
 	}
-
-	public boolean MoveRight(){
-		for(Object y : joinedjelly){	
-			if(y.CheckingMove(this, "right") == ""){
-				return false;
-			}
-		}
-		for(Join x : game.newGroups){
-			for(Object z : x.joinedjelly){
-				for(Object y : joinedjelly){
-					if(z.xPos+1 == y.xPos && (y.CheckingMove(this, "right")=="right")&&(z.CheckingMove(this, "right")=="right")){
-							y.moveright();
-						
+	public ArrayList<Join> NeighborMakerRight(){
+		ArrayList<Join> Neighbor = new ArrayList<Join>();
+		for(Object y: joinedjelly){
+			for(Join i : game.newGroups){
+				for(Object z : i.joinedjelly){
+					if(y.yPos==z.yPos&&y.xPos+1==z.xPos&&!Neighbor.contains(i)&&i!=this){	
+						Neighbor.add(i);
 					}
 				}
 			}
 		}
-		
-		return false;
+		return Neighbor;
 	}
+	public ArrayList<Join> NeighborMakerLeft(){
+		ArrayList<Join> Neighbor = new ArrayList<Join>();
+		for(Object y: joinedjelly){
+			for(Join i : game.newGroups){
+				for(Object z : i.joinedjelly){
+					if(y.yPos==z.yPos&&y.xPos-1==z.xPos&&!Neighbor.contains(i)&&i!=this){	
+						Neighbor.add(i);
+					}
+				}
+			}
+		}
+		return Neighbor;
+	}
+	public void MoveRight(){
+		if(!CheckRight()){
+			return;
+		}
+		for( Join p : NeighborMakerRight()){
+			p.MoveRight();
+		}
+		for(Object y : joinedjelly){
+			y.moveright();
+		}
+	}
+	public boolean CheckRight(){
+		for(Object y: joinedjelly){
+			if(y.xPos+1 < game.level[y.yPos].length &&
+					game.level[y.yPos][y.xPos+1] ==1){
+				return false;
+			}
+		}
+			for(Join x : NeighborMakerRight()){
+				if(!x.CheckRight()){
+					return false;
+				}
+			}
+			return true;
+	}
+	public boolean CheckLeft(){
+		for(Object y: joinedjelly){
+			if(y.xPos-1 >= 0 &&
+					game.level[y.yPos][y.xPos-1] ==1){
+				return false;
+			}
+		}
+			for(Join x : NeighborMakerLeft()){
+				if(!x.CheckLeft()){
+					return false;
+				}
+			}
+			return true;
+	}
+
 
 	//makes sure that the block to the right is clear
 
 
-	public boolean MoveLeft(){
-		for(Object y : joinedjelly){	
-			if(y.CheckingMove(this, "left") == ""){
-				return false;
-			}
+	public void MoveLeft(){
+		if(!CheckLeft()){
+			return;
 		}
-		for(Object y : joinedjelly){	
+		for( Join p : NeighborMakerLeft()){
+			p.MoveLeft();
+		}
+		for(Object y : joinedjelly){
 			y.moveleft();
 		}
-		return false;
 	}
 	//makes sure that the block to the right is clear
 
